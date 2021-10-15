@@ -1,0 +1,55 @@
+spring:
+  application:
+    name: server-LinuxTest
+
+  #数据库配置
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    #    url: jdbc:mysql://192.168.56.10:3306/gulimall_sms?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
+    url: jdbc:mysql://180.76.180.113:3306/LinuxTest?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
+    username: root
+    password: root
+
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
+
+  #邮箱设置
+  mail:
+    username: 1643057053@qq.com
+    password: ootphxhifcoicjfe
+    host: smtp.qq.com
+    port: 465
+    protocol: smtp
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true #一定要开启ssl,不然会503 验证失败的
+aliyun:
+  sendMsg:
+#    产品名称:云通信短信API产品,开发者无需替换
+    product: Dysmsapi
+#    产品域名,开发者无需替换
+    domain: dysmsapi.aliyuncs.com
+    accessKeyId: LTAI5tSqqwGdFsmNBDbfVbov
+    accessKeySecret: i9e01tXpvm2ZtsPpte0vpKmBztYq18
+
+baidu:
+  map:
+    ak: 7QZq3RfbfuGoPU00m3uvPZr6jeNoeEnI
+server:
+  port: 8082
+
+#  mybstis配置
+mybatis:
+  configuration:
+    # 打印SQL语句
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+    call-setters-on-nulls: true
+  mapper-locations: mapper/*Mapper.xml
+#  typeAliasesPackage: com.liez
