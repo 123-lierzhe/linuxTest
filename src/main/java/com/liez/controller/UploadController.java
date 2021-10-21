@@ -25,6 +25,7 @@ public class UploadController {
 
     /**
      * 简单上传文件(通过选择文件的方式上传)
+     *
      * @param file
      * @return
      */
@@ -39,9 +40,9 @@ public class UploadController {
         try {
             String fileName = file.getOriginalFilename();
             byte[] bytes = file.getBytes();
-            UploadFileUtil.sftpUpload(bytes, fileName,username,ip,port,password,linuxFilePath);
-        }catch (Exception e){
-            log.error("关闭文件流失败失败，失败原因：{}",e.toString());
+            UploadFileUtil.sftpUpload(bytes, fileName, username, ip, port, password, linuxFilePath);
+        } catch (Exception e) {
+            log.error("关闭文件流失败失败，失败原因：{}", e.toString());
             e.printStackTrace();
             return R.error();
         }
@@ -50,6 +51,7 @@ public class UploadController {
 
     /**
      * 上传文件并显示进度（采用选择文件路径的方式上传）
+     *
      * @param
      * @return
      */
@@ -64,9 +66,9 @@ public class UploadController {
         String src = params.get("src").toString();
         String dest = params.get("dest").toString();
         try {
-            UploadFileUtil.sftpPathUpload(src, dest,username,ip,port,password);
-        }catch (Exception e){
-            log.error("上传文件失败，失败原因：{}",e.toString());
+            UploadFileUtil.sftpPathUpload(src, dest, username, ip, port, password);
+        } catch (Exception e) {
+            log.error("上传文件失败，失败原因：{}", e.toString());
             // TODO 关流
             e.printStackTrace();
             return R.error();
@@ -77,10 +79,14 @@ public class UploadController {
     /**
      * 通过绝对路径上传
      */
-    public void uploadPathToLinuxByabsout(){
+    public void uploadPathToLinuxByabsout() {
         try {
 //            uploadService.uploadPathToLinuxByabsout();
-        }catch (Exception e){
+
+
+
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
