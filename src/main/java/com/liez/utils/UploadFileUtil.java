@@ -2,6 +2,7 @@ package com.liez.utils;
 
 import com.jcraft.jsch.*;
 import com.liez.myConfig.MyUploadProgressMonitor;
+import com.liez.myConfig.MydownloadProgressMonitor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -39,6 +40,7 @@ public class UploadFileUtil {
             //删除之前上传的同名文件
             ChannelSftp.LsEntry lsEntry = (ChannelSftp.LsEntry) v.get(i);
             if (fileName.equals(String.valueOf(lsEntry.getFilename()))) {
+                log.info("正在删除已有文件");
                 sftp.rm(fileName);
             }
         }
@@ -82,24 +84,27 @@ public class UploadFileUtil {
      */
     public static void downFromToLinux(String ip, String username, String password, String fromFilePath, int port, String dest, String localIp, String localUsername, String localPassword, int localPort,String fileName) throws Exception {
         //连接文件原服务器
+        ChannelSftp localSftp = getConnect(localUsername, localIp, localPort, localPassword);
+
         ChannelSftp sftp = getConnect(username, ip, port, password);
         SftpATTRS stat = sftp.stat(fromFilePath);
         long fileSize = stat.getSize();
         FileOutputStream fileOutputStream = new FileOutputStream(dest);
 
         //连接本地服务器
-        ChannelSftp localSftp = getConnect(localUsername, localIp, localPort, localPassword);
+//        ChannelSftp localSftp = getConnect(localUsername, localIp, localPort, localPassword);
         localSftp.cd(dest);
         Vector ls = sftp.ls("*");
         for (int i = 0; i < ls.size(); i++) {
             //删除之前上传的同名文件
             ChannelSftp.LsEntry lsEntry = (ChannelSftp.LsEntry) ls.get(i);
             if (fileName.equals(String.valueOf(lsEntry.getFilename()))) {
+                log.info("正在删除旧文件：{}",fileName);
                 sftp.rm(fileName);
             }
         }
 
-        sftp.get(fromFilePath, fileOutputStream, new MyUploadProgressMonitor(fileSize));
+        sftp.get(fromFilePath, fileOutputStream, new MydownloadProgressMonitor(fileSize));
 
 
     }

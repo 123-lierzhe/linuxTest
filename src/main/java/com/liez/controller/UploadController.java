@@ -91,9 +91,24 @@ public class UploadController {
      * 输入win的IP用户名密码，将win的文件下载到linux
      *
      * @param params
+     * {
+     *     "ip":"114.242.249.217",
+     *     "username":"liez",
+     *     "password":"zhe",
+     *     "filePath":"C:\\Users\\liez\\Downloads\\SmarTTY-3.2.msi",
+     *     "dest":"/jars/",
+     *     "localIp":"180.76.180.113",
+     *     "localUsername":"root",
+     *     "localPassword":"zhe981127!",
+     *     "localPort":22,
+     *     "port":22,
+     *     "fileName":"SmarTTY-3.2.msi"
+     * }
+     * 连接windows一直超时
      */
     @PostMapping("downFromWinToLinux")
-    public void downFromToLinux(@RequestBody JSONObject params,MultipartFile file) {
+    public void downFromToLinux(@RequestBody JSONObject params) {
+        log.info("下载文件开始");
         String ip = params.get("ip").toString();
         String username = params.get("username").toString();
         String password = params.get("password").toString();
@@ -102,14 +117,15 @@ public class UploadController {
         String localIp = params.get("localIp").toString();
         String localUsername = params.get("localUsername").toString();
         String localPassword = params.get("localPassword").toString();
+        String fileName = params.get("fileName").toString();
         int localPort = Integer.parseInt(params.get("localPort").toString());
         int port = Integer.parseInt(params.get("port").toString());
-        String filename = file.getOriginalFilename();
 
         try {
-            UploadFileUtil.downFromToLinux(ip, username, password, fromFilePath, port, dest, localIp, localUsername, localPassword, localPort,filename);
+            UploadFileUtil.downFromToLinux(ip, username, password, fromFilePath, port, dest, localIp, localUsername, localPassword, localPort,fileName);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        log.info("下载文件结束");
     }
 }
