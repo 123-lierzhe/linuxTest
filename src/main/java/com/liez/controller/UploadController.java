@@ -6,10 +6,7 @@ import com.liez.utils.R;
 import com.liez.utils.UploadFileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -29,12 +26,12 @@ public class UploadController {
      * @param file
      * @return
      */
-    @PostMapping("uploadJarToLinux")
-    public R uploadJarToLinux(MultipartFile file) {
+    @PostMapping("uploadJarToLinux/{linuxFilePath}")
+    public R uploadJarToLinux(MultipartFile file, @PathVariable String linuxFilePath) {
         String ip = "180.76.180.113";
         String username = "root";
         String password = "zhe981127!";
-        String linuxFilePath = "/jars";
+//        String linuxFilePath = "/jars";
         int port = 22;
 //
         try {
