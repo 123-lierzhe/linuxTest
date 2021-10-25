@@ -82,11 +82,26 @@ public class UploadController {
     public void uploadPathToLinuxByabsout() {
         try {
 //            uploadService.uploadPathToLinuxByabsout();
-
-
-
-
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 输入win的IP用户名密码，将win的文件下载到linux
+     * @param params
+     */
+    @PostMapping("downFromWinToLinux")
+    public void downFromToLinux(@RequestBody JSONObject params){
+        String ip = params.get("ip").toString();
+        String username = params.get("username").toString();
+        String password = params.get("password").toString();
+        String fromFilePath = params.get("filePath").toString();
+        int port = Integer.parseInt(params.get("port").toString());
+        String dest = params.get("dest").toString();
+        try {
+            UploadFileUtil.downFromToLinux(ip, username, password, fromFilePath, port, dest);
+        }catch (Exception e){
             e.printStackTrace();
         }
     }

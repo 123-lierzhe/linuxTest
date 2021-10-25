@@ -1,10 +1,11 @@
 package com.liez.utils;
 
 import com.jcraft.jsch.*;
-import com.liez.myConfig.MyProgressMonitor;
+import com.liez.myConfig.MyUploadProgressMonitor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Vector;
@@ -65,11 +66,29 @@ public class UploadFileUtil {
         long fileSize = file.length();
 
         //从本地上传一个文件到服务器
-        sftp.put(src,dest,new MyProgressMonitor(fileSize));
+        sftp.put(src,dest,new MyUploadProgressMonitor(fileSize));
 
         //关闭连接
         closeConnect();
     }
+
+    /**
+     * 利用JSch包实现SFTP文件下载(通过路径，显示进度)
+     * @param src
+     * @param dest
+     * @throws IOException
+     */
+    public static void downFromToLinux(String ip, String username, String password, String fromFilePath, int port, String dest) throws Exception{
+        ChannelSftp sftp = getConnect(username, ip, port, password);
+        SftpATTRS stat = sftp.stat(fromFilePath);
+        long fileSize = stat.getSize();
+        FileOutputStream fileOutputStream = new FileOutputStream(dest);
+
+        sftp.get(fromFilePath,fileOutputStream,new MyUploadProgressMonitor(fileSize));
+
+
+    }
+
 
     public static ChannelSftp getConnect(String username,String ip,int port,String password) throws Exception{
 
@@ -108,4 +127,6 @@ public class UploadFileUtil {
             channel.disconnect();
         }
     }
+
+
 }
