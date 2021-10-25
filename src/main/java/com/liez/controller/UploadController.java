@@ -89,19 +89,26 @@ public class UploadController {
 
     /**
      * 输入win的IP用户名密码，将win的文件下载到linux
+     *
      * @param params
      */
     @PostMapping("downFromWinToLinux")
-    public void downFromToLinux(@RequestBody JSONObject params){
+    public void downFromToLinux(@RequestBody JSONObject params,MultipartFile file) {
         String ip = params.get("ip").toString();
         String username = params.get("username").toString();
         String password = params.get("password").toString();
         String fromFilePath = params.get("filePath").toString();
-        int port = Integer.parseInt(params.get("port").toString());
         String dest = params.get("dest").toString();
+        String localIp = params.get("localIp").toString();
+        String localUsername = params.get("localUsername").toString();
+        String localPassword = params.get("localPassword").toString();
+        int localPort = Integer.parseInt(params.get("localPort").toString());
+        int port = Integer.parseInt(params.get("port").toString());
+        String filename = file.getOriginalFilename();
+
         try {
-            UploadFileUtil.downFromToLinux(ip, username, password, fromFilePath, port, dest);
-        }catch (Exception e){
+            UploadFileUtil.downFromToLinux(ip, username, password, fromFilePath, port, dest, localIp, localUsername, localPassword, localPort,filename);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

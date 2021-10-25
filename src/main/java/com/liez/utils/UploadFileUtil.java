@@ -26,10 +26,10 @@ public class UploadFileUtil {
      * @param fileName 文件名
      * @throws Exception
      */
-    public static void sftpUpload(byte[] bytes, String fileName,String username,String ip,int port,String password,String linuxSaveFilePath) throws Exception {
+    public static void sftpUpload(byte[] bytes, String fileName, String username, String ip, int port, String password, String linuxSaveFilePath) throws Exception {
 
         //获得连接
-        ChannelSftp sftp = getConnect(username,ip,port,password);
+        ChannelSftp sftp = getConnect(username, ip, port, password);
 
         //进入服务器指定文件夹
         sftp.cd(linuxSaveFilePath);
@@ -53,20 +53,21 @@ public class UploadFileUtil {
 
     /**
      * 利用JSch包实现SFTP上传文件(通过路径，显示进度)
+     *
      * @param src
      * @param dest
      * @throws IOException
      */
-    public static void sftpPathUpload(String src,String dest,String username,String ip,int port,String password) throws Exception {
+    public static void sftpPathUpload(String src, String dest, String username, String ip, int port, String password) throws Exception {
 
-        ChannelSftp sftp = getConnect(username,ip,port,password);
+        ChannelSftp sftp = getConnect(username, ip, port, password);
 
         //获得文件大小
         File file = new File(src);
         long fileSize = file.length();
 
         //从本地上传一个文件到服务器
-        sftp.put(src,dest,new MyUploadProgressMonitor(fileSize));
+        sftp.put(src, dest, new MyUploadProgressMonitor(fileSize));
 
         //关闭连接
         closeConnect();
@@ -74,23 +75,37 @@ public class UploadFileUtil {
 
     /**
      * 利用JSch包实现SFTP文件下载(通过路径，显示进度)
-     * @param src
+     *
+     * @param
      * @param dest
      * @throws IOException
      */
-    public static void downFromToLinux(String ip, String username, String password, String fromFilePath, int port, String dest) throws Exception{
+    public static void downFromToLinux(String ip, String username, String password, String fromFilePath, int port, String dest, String localIp, String localUsername, String localPassword, int localPort,String fileName) throws Exception {
+        //连接文件原服务器
         ChannelSftp sftp = getConnect(username, ip, port, password);
         SftpATTRS stat = sftp.stat(fromFilePath);
         long fileSize = stat.getSize();
         FileOutputStream fileOutputStream = new FileOutputStream(dest);
 
-        sftp.get(fromFilePath,fileOutputStream,new MyUploadProgressMonitor(fileSize));
+        //连接本地服务器
+        ChannelSftp localSftp = getConnect(localUsername, localIp, localPort, localPassword);
+        localSftp.cd(dest);
+        Vector ls = sftp.ls("*");
+        for (int i = 0; i < ls.size(); i++) {
+            //删除之前上传的同名文件
+            ChannelSftp.LsEntry lsEntry = (ChannelSftp.LsEntry) ls.get(i);
+            if (fileName.equals(String.valueOf(lsEntry.getFilename()))) {
+                sftp.rm(fileName);
+            }
+        }
+
+        sftp.get(fromFilePath, fileOutputStream, new MyUploadProgressMonitor(fileSize));
 
 
     }
 
 
-    public static ChannelSftp getConnect(String username,String ip,int port,String password) throws Exception{
+    public static ChannelSftp getConnect(String username, String ip, int port, String password) throws Exception {
 
         JSch jsch = new JSch();
 
