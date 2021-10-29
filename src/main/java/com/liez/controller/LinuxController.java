@@ -86,17 +86,20 @@ public class LinuxController {
     }
 
     //定时发送短信
-    @Scheduled(cron = "0 40 18 * * ?")
+//    @Scheduled(cron = "0 40 18 * * ?")
+    @PostMapping("kk")
     public void sendMessage() {
         try {
-            ArrayList<Object> objects = new ArrayList<>();
-            log.info("LinuxController-提醒定时打卡的短信执行开始---------------------------------,时间是:{}", sdf.format(new Date()));
-            long startTime = System.currentTimeMillis();
-            String phone = "15128202550";
-            String code = String.valueOf(new Random().nextInt(666666));
-            aliyunService.sendMessage(phone, code);
-            long endTime = System.currentTimeMillis();
-            log.info("LinuxController-提醒定时打卡的邮件执行结束,时间是:{},耗时:{}", sdf.format(new Date()), (endTime - startTime));
+//            ArrayList<Object> objects = new ArrayList<>();
+//            log.info("LinuxController-提醒定时打卡的短信执行开始---------------------------------,时间是:{}", sdf.format(new Date()));
+//            long startTime = System.currentTimeMillis();
+//            String phone = "15128202550";
+//            String code = String.valueOf(new Random().nextInt(666666));
+//            aliyunService.sendMessage(phone, code);
+            Map<String, Object> lastTrainCount = trainService.getLastTrainCount();
+            System.out.println(lastTrainCount.toString());
+//            long endTime = System.currentTimeMillis();
+//            log.info("LinuxController-提醒定时打卡的邮件执行结束,时间是:{},耗时:{}", sdf.format(new Date()), (endTime - startTime));
         } catch (Exception e) {
             e.printStackTrace();
             log.error("LinuxController-提醒定时打卡的邮件执行失败,时间是:{}", sdf.format(new Date()));

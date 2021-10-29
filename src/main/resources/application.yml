@@ -42,13 +42,13 @@ baidu:
   map:
     ak: 7QZq3RfbfuGoPU00m3uvPZr6jeNoeEnI
 server:
-  port: 8082
+  port: 802
 
 #  mybstis配置
 mybatis:
   configuration:
     # 打印SQL语句
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
     call-setters-on-nulls: true
   mapper-locations: mapper/*Mapper.xml

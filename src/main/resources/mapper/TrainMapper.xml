@@ -45,4 +45,12 @@
           #{animal}
         </foreach>
     </select>
+
+    <insert id="insertData">
+        insert into datasource_state (id,is_alive,create_time) values (#{id},#{isAlive},#{createTime})
+    </insert>
+
+    <select id="selectData" resultType="java.util.Map">
+        select * from datasource_state;
+    </select>
 </mapper>
