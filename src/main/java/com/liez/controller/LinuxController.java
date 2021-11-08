@@ -194,15 +194,36 @@ public class LinuxController {
         return R.oK().data("data",whether);
     }
 
-    public static void main(String[] args) throws IOException {
-        Map<String,String> param = new HashMap<>();
-        param.put("transNo","123");
-        param.put("type","1");
-        param.put("fromUser","1643057053@qq.com");
-        param.put("toUser","15128202550@163.com");
-        param.put("title","test@163.com");
-        param.put("content","test@163.com");
-        HttpClientUtils.doPost("http://mgateway.dev.cs/services/email/api/open/sendEmail",param,"UTF-8");
+//    public static void main(String[] args) throws IOException {
+//        Map<String,String> param = new HashMap<>();
+//        param.put("transNo","123");
+//        param.put("type","1");
+//        param.put("fromUser","1643057053@qq.com");
+//        param.put("toUser","15128202550@163.com");
+//        param.put("title","test@163.com");
+//        param.put("content","test@163.com");
+//        HttpClientUtils.doPost("http://mgateway.dev.cs/services/email/api/open/sendEmail",param,"UTF-8");
+//    }
+
+    public static void main(String[] args) {
+        String param = HttpClientUtils.doGet("https://cd.jd.com/stocks?callback=jQuery295683&type=getstocks&skuIds=100012881852%2C100012881854%2C100012881836&area=1_2810_55547_0&_=1636380119654", null);
+        String substring = param.substring(13);
+        String substring1 = substring.substring(0, substring.length() - 1);
+        JSONObject jsonObject = JSONObject.parseObject(substring1);        Map<String,Object> responseMap = (Map<String,Object>)jsonObject.get("100012881852");
+        String stockState = responseMap.get("StockState").toString();
+        System.out.println(stockState);
+    }
+
+    //发送邮件2
+//    @Scheduled(cron = "0 30 18 * * ?")
+    public void sendEmail23() {
+        String param = HttpClientUtils.doGet("https://cd.jd.com/stocks?callback=jQuery295683&type=getstocks&skuIds=100012881852%2C100012881854%2C100012881836&area=1_2810_55547_0&_=1636380119654", null);
+        String substring = param.substring(12);
+        String substring1 = substring.substring(0, substring.length() - 1);
+        JSONObject jsonObject = JSONObject.parseObject(substring1);
+        Map<String,Object> responseMap = (Map<String,Object>)jsonObject.get("100012881852");
+        String stockState = responseMap.get("StockState").toString();
+        System.out.println(stockState);
     }
 
 }
