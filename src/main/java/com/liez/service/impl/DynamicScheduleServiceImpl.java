@@ -143,6 +143,7 @@ public class DynamicScheduleServiceImpl implements DynamicScheduleService {
             if(!dataSourceHasScheduledflag){
                 deleteScheduled(jobKey);
             }
+
             dataSourceHasScheduledflag = false;
         }
 
