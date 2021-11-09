@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liez.dao.ScheduledDao">
+    <select id="getJobHistoryRows" resultType="int">
+        select log_rows
+        from scheduld_row
+        where id = #{rowsId}
+    </select>
+
+    <select id="getJobCurrentRows" resultType="int">
+        select count(*)
+        from schedule_log
+    </select>
+
+    <select id="getBetterRowsDetailId" resultType="string">
+        select schedule_data_id
+        from schedule_log
+        order by create_time desc order by create_time ASC limit #{betterRows}
+    </select>
+
+
+    <select id="getDetailById" resultType="map">
+        select id as id,
+        cron_expression as cron,
+        package_name as packageName,
+        bean_name as beanName,
+        job_state as state,
+        change_type as changeType
+        from schuduled_data
+        where id in
+        <foreach collection="list" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+        order by create_time ASC
+    </select>
+
+
+    <update id="updateRows" parameterType="int">
+        update scheduld_row
+        set log_rows = log_rows + 1
+        where id = 'rowsId'
+    </update>
+
+    <select id="getAllUseingScheduled" resultType="map">
+        select id              as id,
+               cron_expression as cron,
+               package_name    as packageName,
+               bean_name       as beanName,
+               job_state       as state,
+               change_type     as changeType
+        from schuduled_data
+        where job_state = '1'
+    </select>
+
+</mapper>

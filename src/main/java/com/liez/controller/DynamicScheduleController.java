@@ -3,10 +3,12 @@ package com.liez.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.liez.dao.TrainDao;
 import com.liez.job.SendEmailJob;
+import com.liez.service.DynamicScheduleService;
 import com.liez.utils.R;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -20,6 +22,8 @@ public class DynamicScheduleController {
 
     @Autowired
     private TrainDao trainDao;
+    @Autowired
+    private DynamicScheduleService scheduleService;
 
 
     /**
@@ -31,34 +35,74 @@ public class DynamicScheduleController {
      */
     @PostMapping("insertJob")
     public R insertJob(@RequestBody JSONObject cronJSON) throws SchedulerException {
-        //1.创建调度器
-        StdSchedulerFactory schedulerFactory = new StdSchedulerFactory();
-        String triggerName = cronJSON.getString("triggerName");
-        String triggerGroupName = cronJSON.getString("triggerGroupName");
-        Scheduler scheduler = schedulerFactory.getScheduler();
-        //2.创建job实例并于要执行类绑定
-        JobDetail jobDetail = JobBuilder.newJob(SendEmailJob.class).withIdentity(cronJSON.getString("jobName"), cronJSON.getString("jobGroupName")).build();
-        //3.构建tigger实例。设置执行频率
-        Trigger trigger = TriggerBuilder.newTrigger().withIdentity(triggerName, triggerGroupName)
-                .usingJobData("cron", cronJSON.getString("cron"))
-                .startNow() //立即执行
-                .withSchedule(CronScheduleBuilder.cronSchedule(cronJSON.getString("cron")))
-                .build();
-        //4.执行
-        scheduler.scheduleJob(jobDetail, trigger);
-        System.out.println("=======================scheduler start=====================");
-        scheduler.start();
+        try {
+            scheduleService.insertJob(cronJSON);
+            return R.oK();
+        } catch (Exception e) {
+            e.toString();
+            return R.error();
+        }
+    }
+
+    /**
+     * 动态添加不同定时任务的执行时间
+     *
+     * @param params
+     * @return
+     */
+    @PostMapping("insertDifferentServiceJob")
+    public R insertDifferentServiceJob(@RequestBody JSONObject params) {
+        try {
+            scheduleService.insertDifferentServiceJob(params);
+            return R.oK();
+        } catch (Exception e) {
+            e.toString();
+            return R.error();
+        }
+    }
+
+    /**
+     * 定时扫描定时历史条数表，检测到由新日志插入时根据主键id扫描定时详情表(五分钟扫描一次)
+     *
+     * @return
+     */
+//    @Scheduled(cron = "0/10 * * * * ? ")
+    public R scanTableLoadScheduled() {
+        try {
+            scheduleService.scanTableLoadScheduled();
+            return R.oK();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error();
+        }
+    }
+
+    /**
+     * 定时扫描定时历史条数表，检测到由新日志插入时根据主键id扫描定时详情表(五分钟扫描一次)
+     *
+     * @return
+     */
+    @Scheduled(cron = "0/10 * * * * ? ")
+    public R scanTableLoadScheduled2() {
+        try {
+            scheduleService.scanTableLoadScheduled2();
+            return R.oK();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error();
+        }
+    }
+
+
+    @PostMapping("saveData")
+    public R saveData() {
+        trainDao.insertData(UUID.randomUUID().toString(), true, new Date());
         return R.oK();
     }
 
-    @PostMapping("saveData")
-    public R saveData(){
-        trainDao.insertData(UUID.randomUUID().toString(),true,new Date());
-        return R.oK();
-    }
     @PostMapping("selectData")
-    public R selectData(){
-        List<Map<String,Object>> mapList = trainDao.selectData();
-        return R.oK().data("data",mapList);
+    public R selectData() {
+        List<Map<String, Object>> mapList = trainDao.selectData();
+        return R.oK().data("data", mapList);
     }
 }

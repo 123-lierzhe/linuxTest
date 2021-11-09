@@ -70,7 +70,7 @@ public class LinuxController {
     }
 
     //发送邮件2
-//    @Scheduled(cron = "0 30 18 * * ?")
+//    @Scheduled(cron = "0 * * * * ?")
     public void sendEmail2() {
         log.info("提醒定时打卡的邮件执行开始,时间是:{}", sdf.format(new Date()));
         long startTime = System.currentTimeMillis();
@@ -86,20 +86,16 @@ public class LinuxController {
     }
 
     //定时发送短信
-//    @Scheduled(cron = "0 40 18 * * ?")
-    @PostMapping("kk")
+    @Scheduled(cron = "0 40 18 * * ?")
     public void sendMessage() {
         try {
-//            ArrayList<Object> objects = new ArrayList<>();
-//            log.info("LinuxController-提醒定时打卡的短信执行开始---------------------------------,时间是:{}", sdf.format(new Date()));
-//            long startTime = System.currentTimeMillis();
-//            String phone = "15128202550";
-//            String code = String.valueOf(new Random().nextInt(666666));
-//            aliyunService.sendMessage(phone, code);
-            Map<String, Object> lastTrainCount = trainService.getLastTrainCount();
-            System.out.println(lastTrainCount.toString());
-//            long endTime = System.currentTimeMillis();
-//            log.info("LinuxController-提醒定时打卡的邮件执行结束,时间是:{},耗时:{}", sdf.format(new Date()), (endTime - startTime));
+            ArrayList<Object> objects = new ArrayList<>();
+            log.info("LinuxController-提醒定时打卡的短信执行开始---------------------------------,时间是:{}", sdf.format(new Date()));
+            long startTime = System.currentTimeMillis();
+            String phone = "15128202550";
+            aliyunService.sendMessage(phone, "666666");
+            long endTime = System.currentTimeMillis();
+            log.info("LinuxController-提醒定时打卡的邮件执行结束,时间是:{},耗时:{}", sdf.format(new Date()), (endTime - startTime));
         } catch (Exception e) {
             e.printStackTrace();
             log.error("LinuxController-提醒定时打卡的邮件执行失败,时间是:{}", sdf.format(new Date()));
@@ -114,8 +110,7 @@ public class LinuxController {
             log.info("LinuxController-提醒定时打卡的短信执行开始---------------------------------,时间是:{}", sdf.format(new Date()));
             long startTime = System.currentTimeMillis();
             String phone = "15128202550";
-            String code = String.valueOf(new Random().nextInt(666666));
-            aliyunService.sendMessage(phone, code);
+            aliyunService.sendMessage(phone, "666666");
             long endTime = System.currentTimeMillis();
             log.info("LinuxController-提醒定时打卡的邮件执行结束,时间是:{},耗时:{}", sdf.format(new Date()), (endTime - startTime));
         } catch (Exception e) {
@@ -194,15 +189,5 @@ public class LinuxController {
         return R.oK().data("data",whether);
     }
 
-    public static void main(String[] args) throws IOException {
-        Map<String,String> param = new HashMap<>();
-        param.put("transNo","123");
-        param.put("type","1");
-        param.put("fromUser","1643057053@qq.com");
-        param.put("toUser","15128202550@163.com");
-        param.put("title","test@163.com");
-        param.put("content","test@163.com");
-        HttpClientUtils.doPost("http://mgateway.dev.cs/services/email/api/open/sendEmail",param,"UTF-8");
-    }
 
 }

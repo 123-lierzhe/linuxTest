@@ -8,8 +8,8 @@ spring:
     driverClassName: com.mysql.jdbc.Driver
     #    url: jdbc:mysql://192.168.56.10:3306/gulimall_sms?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
     url: jdbc:mysql://180.76.180.113:3306/LinuxTest?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
-    username: root
-    password: root
+    username: liez
+    password: liezhesuny
 
   servlet:
     multipart:
@@ -19,7 +19,7 @@ spring:
   #邮箱设置
   mail:
     username: 1643057053@qq.com
-    password: ootphxhifcoicjfe
+    password: iaevvzfabklcdgah
     host: smtp.qq.com
     port: 465
     protocol: smtp
@@ -42,7 +42,7 @@ baidu:
   map:
     ak: 7QZq3RfbfuGoPU00m3uvPZr6jeNoeEnI
 server:
-  port: 802
+  port: 8081
 
 #  mybstis配置
 mybatis:
