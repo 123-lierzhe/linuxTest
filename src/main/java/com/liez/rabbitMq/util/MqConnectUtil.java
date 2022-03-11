@@ -1,5 +1,6 @@
 package com.liez.rabbitMq.util;
 
+import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 
@@ -19,5 +20,12 @@ public class MqConnectUtil {
 		connectionFactory.setPassword("liez");
 		Connection connection = connectionFactory.newConnection();
 		return connection;
+	}
+
+	public static void closeConnect(Channel channel,Connection connection) throws IOException {
+		if(channel != null && connection != null){
+			channel.close();
+			connection.close();
+		}
 	}
 }

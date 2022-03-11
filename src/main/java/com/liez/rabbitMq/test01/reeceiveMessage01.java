@@ -19,25 +19,17 @@ public class reeceiveMessage01 {
 
 	private static String QUENE_NAME = "quene_test_01";
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, InterruptedException {
 		Connection mqConnection = MqConnectUtil.getMqConnection();
 		Channel channel = mqConnection.createChannel();
 		channel.queueDeclare(QUENE_NAME,true, false, false, null);
+		//创建消费者
 		QueueingConsumer queueingConsumer = new QueueingConsumer(channel);
-		channel.basicConsume(QUENE_NAME, false, new DefaultConsumer(channel){
-			@Override
-			public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
-				log.info("接收消息：{}，时间：{}",new String(body), new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-				try {
-					TimeUnit.SECONDS.sleep(10);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				//消息确认
-				channel.basicAck(envelope.getDeliveryTag(), false);
-			}
-		});
-		channel.close();
-		mqConnection.close();
+		channel.basicConsume(QUENE_NAME, true, queueingConsumer);
+
+		while (true){
+			QueueingConsumer.Delivery delivery = queueingConsumer.nextDelivery();
+			log.info("接收到消息：{}", new String(delivery.getBody()));
+		}
 	}
 }
