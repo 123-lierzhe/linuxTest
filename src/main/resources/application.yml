@@ -7,9 +7,9 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.jdbc.Driver
     #    url: jdbc:mysql://192.168.56.10:3306/gulimall_sms?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
-    url: jdbc:mysql://180.76.180.113:3306/LinuxTest?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
+    url: jdbc:mysql://39.107.13.68:3306/LinuxTest?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
     username: liez
-    password: liezhesuny
+    password: liez
 
   servlet:
     multipart:
@@ -42,7 +42,7 @@ baidu:
   map:
     ak: 7QZq3RfbfuGoPU00m3uvPZr6jeNoeEnI
 server:
-  port: 8081
+  port: 9001
 
 #  mybstis配置
 mybatis:
