@@ -31,7 +31,7 @@ public class MyConsume extends DefaultConsumer {
         log.info("properties is === :{}", properties);
         log.info("body is === :{}", new String(body));
         //确认消息的方法，回调成功以后再执行下一条，表示这条消息我已经处理完了，你可以给我下一条了。false表示不批量签收
-        //channel.basicAck(envelope.getDeliveryTag(), false);
+        channel.basicAck(envelope.getDeliveryTag(), false);
         log.info("================consume message success==================");
 
     }

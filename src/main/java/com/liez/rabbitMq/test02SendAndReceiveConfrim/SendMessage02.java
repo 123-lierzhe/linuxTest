@@ -37,7 +37,7 @@ public class SendMessage02 {
             channel.addConfirmListener(new ConfirmListener() {
                 @Override
                 public void handleAck(long deliveryTag, boolean multiple) throws IOException {
-                    log.info("----------------yes send ack---------------:{}", deliveryTag);
+                    //log.info("----------------yes send ack---------------:{}", deliveryTag);
                 }
 
                 @Override
